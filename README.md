@@ -29,6 +29,9 @@ Understand how to select the right compute platform for scalability, performance
 IT professionals and engineers working with Azure
 Gain a practical framework for designing and operating modern Azure workloads.
 
+### Slides
+[The Azure Compute Decision Framework.pdf](The%20Azure%20Compute%20Decision%20Framework.pdf)
+
 ### Tags
 Cloud Computing<br />
 Microsoft Azure<br />
