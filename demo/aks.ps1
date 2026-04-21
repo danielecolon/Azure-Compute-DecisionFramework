@@ -19,4 +19,7 @@ az aks get-credentials --name $PROJECT-$RND_NUMBER --resource-group $RESOURCEGRO
 
 # Deploy nginx
 kubectl apply -f nginx-demo.yaml
+
+# Wait 30 seconds to give svc chance to get Extneral-IP
+Start-Sleep -Seconds 30
 kubectl get svc nginx-service --namespace $ENV
