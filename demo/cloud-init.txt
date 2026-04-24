@@ -1,24 +1,33 @@
 #cloud-config
 package_update: true
+
 packages:
   - nginx
+
+write_files:
+  - path: /usr/local/bin/setup-nginx-page.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      VM_NAME=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance/compute/name?api-version=2021-02-01&format=text")
+
+      cat > /var/www/html/index.html <<EOF
+      <html>
+      <head>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <title>Azure VM</title>
+      </head>
+      <body>
+        <h1>${VM_NAME}</h1>
+        <p>Provisioned by cloud-init</p>
+      </body>
+      </html>
+      EOF
 
 runcmd:
   - systemctl enable nginx
   - systemctl start nginx
-  - VM_NAME=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance/compute/name?api-version=2021-02-01&format=text")
-  - cat > /var/www/html/index.html <<EOF
-    <html>
-    <head>
-      <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-      <meta http-equiv="Pragma" content="no-cache">
-      <meta http-equiv="Expires" content="0">
-      <title>Azure VM</title>
-    </head>
-    <body>
-      <h1>${VM_NAME}</h1>
-      <p>Provisioned by cloud-init</p>
-    </body>
-    </html>
-    EOF
+  - /usr/local/bin/setup-nginx-page.sh
   - systemctl restart nginx
